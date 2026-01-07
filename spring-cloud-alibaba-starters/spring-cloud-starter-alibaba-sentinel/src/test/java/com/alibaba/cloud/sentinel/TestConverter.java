@@ -16,12 +16,13 @@
 
 package com.alibaba.cloud.sentinel;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.alibaba.csp.sentinel.datasource.Converter;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowRule;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author <a href="mailto:fangjian0423@gmail.com">Jim</a>
@@ -32,7 +33,14 @@ public class TestConverter implements Converter<String, List<ParamFlowRule>> {
 
 	@Override
 	public List<ParamFlowRule> convert(String s) {
-		return objectMapper.readValue(s, new TypeReference<>() {});
+		try {
+			return objectMapper.readValue(s, new TypeReference<List<ParamFlowRule>>() {
+			});
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

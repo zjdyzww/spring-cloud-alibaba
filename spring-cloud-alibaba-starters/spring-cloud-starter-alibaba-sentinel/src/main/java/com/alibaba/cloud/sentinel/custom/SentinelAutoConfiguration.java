@@ -26,10 +26,9 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowRule;
 import com.alibaba.csp.sentinel.slots.system.SystemRule;
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -83,12 +82,11 @@ public class SentinelAutoConfiguration {
 		@Configuration(proxyBeanMethods = false)
 		protected static class SentinelJsonConfiguration {
 
-			private final ObjectMapper objectMapper;
+			private ObjectMapper objectMapper = new ObjectMapper();
 
 			public SentinelJsonConfiguration() {
-				this.objectMapper = JsonMapper.builder()
-						.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-						.build();
+				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+						false);
 			}
 
 			@Bean("sentinel-json-flow-converter")
@@ -122,12 +120,11 @@ public class SentinelAutoConfiguration {
 		@Configuration(proxyBeanMethods = false)
 		protected static class SentinelXmlConfiguration {
 
-			private final XmlMapper xmlMapper;
+			private XmlMapper xmlMapper = new XmlMapper();
 
 			public SentinelXmlConfiguration() {
-				this.xmlMapper = XmlMapper.builder()
-						.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-						.build();
+				xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+						false);
 			}
 
 			@Bean("sentinel-xml-flow-converter")
